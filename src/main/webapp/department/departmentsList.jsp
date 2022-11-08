@@ -48,10 +48,25 @@
 	.center {
 		text-align : center;
 		font-size : 20pt;
+		font-weight : bold;
 	}
 	.sub {
-		font-size : 30pt;
+		font-size : 40pt;
 		color : white;
+	}
+	.buttonSize {
+		width:350px; height:auto;
+	}
+	.buttonFont {
+		font-size : 20pt;
+		font-weight : bolder;
+	}
+	.subButtonSize {
+		width:75px; height:auto;
+	}
+	.subButtonFont {
+		font-size : 15pt;
+		font-weight : bolder;
 	}
 	.wrapper {
 	  display : flex;
@@ -89,14 +104,14 @@
 					<tr>
 						<td class = "center"><%=d.deptNo%></td>
 						<td class = "center"><%=d.deptName%></td>
-						<td class = "center"><a type="button" class="btn btn-warning" href = "<%=request.getContextPath()%>/department/updateDepartmentsForm.jsp?dept_no=<%=d.deptNo%>">수정</a></td>
-						<td class = "center"><a type="button" class="btn btn-danger" href = "<%=request.getContextPath()%>/department/deleteDepartments.jsp?dept_no=<%=d.deptNo%>">삭제</a></td>
+						<td class = "center"><a type="button" class="btn btn-warning subButtonSize" href = "<%=request.getContextPath()%>/department/updateDepartmentsForm.jsp?dept_no=<%=d.deptNo%>"><span class="subButtonFont">수정</span></a></td>
+						<td class = "center"><a type="button" class="btn btn-danger subButtonSize" href = "<%=request.getContextPath()%>/department/deleteDepartments.jsp?dept_no=<%=d.deptNo%>"><span class="subButtonFont">삭제</span></a></td>
 					</tr>
 			<%
 				}
 			%>
 				<tr>
-					<td colspan = "4" class = "center"><a type="button" class="btn btn-dark" href = "<%=request.getContextPath()%>/department/insertDepartmentsForm.jsp">부서 추가</a></td>
+					<td colspan = "4" class = "center"><a type="button" class="btn btn-dark buttonSize" href = "<%=request.getContextPath()%>/department/insertDepartmentsForm.jsp"><span class="buttonFont">부서 추가</span></a></td>
 				</tr>				
 			</tbody>
 					

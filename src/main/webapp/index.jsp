@@ -47,7 +47,29 @@
 		
 		<tr>
 			<td>
-				<div><a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">부서 관리</span></a></div>		
+				<div>
+					<div>
+						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">부서 관리</span></a>
+						&nbsp;
+						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">부서 관리</span></a>
+					</div>
+					
+					<br>
+					
+					<div>
+						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">부서 관리</span></a>
+						&nbsp;
+						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">부서 관리</span></a>
+					</div>
+					
+					<br>
+					
+					<div>
+						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">부서 관리</span></a>
+						&nbsp;
+						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">부서 관리</span></a>
+					</div>	
+				</div>
 			</td>
 		</tr>
 		

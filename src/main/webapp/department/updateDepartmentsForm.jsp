@@ -46,28 +46,33 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
 
 <Style>
+	table {
+		width : 600px;
+		height : 300px;
+	}
+	tr {
+		background-color : rgb(222,222,222)
+	}
 	th,td {
 		text-align : center;
-		font-size : 15pt;
+		font-size : 25pt;
 	}
 	input {
-		width : 300px; 
-		height : 30px;
+		width : 700px; 
+		height : 70px;
 		text-align : center;
-		font-size : 20pt;
+		font-size : 40pt;
 	}
 	.title {
-		border : 10px solid black;
 		font-weight : bolder;
-		background-color : yellow;
 		font-size : 60pt;
-		color : black;
 	}	
 	.buttonSize {
-		width:auto; height:auto;
+		width:350px; height:auto;
 	}
 	.buttonFont {
-		font-size : 30pt;
+		font-size : 40pt;
+		font-weight : bolder;
 	}
 	.wrapper {
 	  display: grid;
@@ -79,7 +84,7 @@
 		text-align : center;
 	}
 </Style>
-<title>부서 UPDATE</title>
+<title>부서 수정</title>
 </head>
 <body style="background-color : rgb(95,95,95)">
 	<div class = "container">
@@ -87,7 +92,7 @@
 		<form action="<%=request.getContextPath()%>/department/updateDepartmentsAction.jsp" method="post">
 			<table class = "wrapper table">
 			
-				<tr>
+				<tr class="table-dark">
 					<td colspan="2"><div class="title">부서 수정</div></td>
 				</tr>
 				
@@ -97,12 +102,12 @@
 				</tr>
 				
 				<tr>
-					<th class="align-middle">부서 이름	</th>
+					<th class="align-middle">부서 이름</th>
 					<td><input type="text" name="dept_name" value="<%=dept.deptName%>"></td>
 				</tr>
 							
-				<tr>
-					<th colspan="2"><button type = "submit" class="btn btn-dark buttonSize"><span class="buttonFont">수정 완료</span></button></th>
+				<tr class="table-dark">
+					<th colspan="2"><button type = "submit" class="btn btn-warning buttonSize"><span class="buttonFont">수정 완료</span></button></th>
 				</tr>
 				
 			</table>
