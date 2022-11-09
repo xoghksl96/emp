@@ -68,6 +68,9 @@
 		font-size : 15pt;
 		font-weight : bolder;
 	}
+	.menuButtonSize {
+		width:120px; height:auto;
+	}
 	.wrapper {
 	  display : flex;
 	  justify-content: center;
@@ -78,7 +81,13 @@
 <title>Departments</title>
 </head>
 <body style="background-color : rgb(95,95,95)">
-
+	<br>
+	<!-- 메뉴 파티션 jsp 구성-->
+	<div class="center">
+		<!-- jsp:inclue에서는 절대주소를 requst.getContextPath()로 쓰지 않음 -->
+		<jsp:include page="/inc/menu.jsp"></jsp:include>
+	</div>
+	
 	<br>
 
 	<div class = "container">		

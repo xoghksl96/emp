@@ -27,6 +27,11 @@
 		text-align : center;
 		font-size : 40pt;
 	}
+	.center {
+		text-align : center;
+		font-size : 20pt;
+		font-weight : bold;
+	}
 	.title {
 		font-weight : bolder;
 		font-size : 60pt;
@@ -38,24 +43,47 @@
 		font-size : 40pt;
 		font-weight : bolder;
 	}
+	.subButtonFont {
+		font-size : 15pt;
+		font-weight : bolder;
+	}
+	.menuButtonSize {
+		width:120px; height:auto;
+	}
 	.wrapper {
 	  display: grid;
 	  place-items: center;
-	  min-height: 100vh;
+	  min-height: 80vh;
 	}
 	.container {
 		background-color : rgb(255,255,255);
 		text-align : center;
 	}
 </Style>
+<script type="text/javascript">
+<%
+	if(request.getParameter("msg") != null)
+	{			
+%>	
+		alert("<%=request.getParameter("msg")%>");
+<%	
+	}
+%>
+</script>	
 <title>부서 추가</title>
 </head>
 <body style="background-color : rgb(95,95,95)">
-
-	<div class = "container border">		
+	<div class = "container-sm">
+	
+		<!-- 메뉴 파티션 jsp 구성-->
+		<!-- jsp:inclue에서는 절대주소를 requst.getContextPath()로 쓰지 않음 -->
+		<br>
+		<div class="center"><jsp:include page="/inc/menu.jsp"></jsp:include></div>
+		<br>
+		
 		<form action="<%=request.getContextPath()%>/department/insertDepartmentsAction.jsp" method="post">
 			<table class = "wrapper table">
-			
+				
 				<tr class="table-dark">
 					<td colspan="2"><div class="title">부서 추가</div></td>
 				</tr>
