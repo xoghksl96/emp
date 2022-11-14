@@ -37,7 +37,7 @@
 	
 
 	// 2-1 이미 존재하는 key(dept_no)값이 입력되었을 경우 에러메세지 띄움.
-	String sqlSelect = "select dept_no,dept_name from departments where dept_no = ? or dept_name"; // 동일한 key(dept_no)가 있는지 확인
+	String sqlSelect = "select dept_no,dept_name from departments where dept_no = ? or dept_name = ?"; // 동일한 key(dept_no)가 있는지 확인
 	PreparedStatement stmtSelect = conn.prepareStatement(sqlSelect);
 	
 	stmtSelect.setString(1,dept.deptNo);

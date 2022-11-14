@@ -1,10 +1,10 @@
 package vo;
 
 public class Employees {
-	public int emp_no;
-	public String birth_date;
-	public String first_name;
-	public String last_name;
+	public int empNo;
+	public String birthDate;
+	public String firstName;
+	public String lastName;
 	public String gender;
-	public String hire_date;
+	public String hireDate;
 }

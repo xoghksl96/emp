@@ -53,7 +53,7 @@
 						&nbsp;
 						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/emp/empList.jsp"><span class="buttonFont">사원 관리</span></a>
 						&nbsp;
-						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/department/departmentsList.jsp"><span class="buttonFont">연봉 관리</span></a>
+						<a class="btn btn-dark button" href="<%=request.getContextPath()%>/board/boardList.jsp"><span class="buttonFont">게시판 관리</span></a>
 					</div>
 				</div>
 			</td>

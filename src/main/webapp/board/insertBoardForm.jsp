@@ -22,7 +22,7 @@
 		font-size : 25pt;
 	}
 	input {
-		width : 700px; 
+		width : 690px; 
 		height : 70px;
 		text-align : center;
 		font-size : 40pt;
@@ -81,25 +81,35 @@
 		<div class="center"><jsp:include page="/inc/menu.jsp"></jsp:include></div>
 		<br>
 		
-		<form action="<%=request.getContextPath()%>/department/insertDepartmentsAction.jsp" method="post">
+		<form action="<%=request.getContextPath()%>/board/insertBoardAction.jsp" method="post">
 			<table class = "wrapper table">
 				
 				<tr class="table-dark">
-					<td colspan="2"><div class="title">부서 추가</div></td>
+					<td colspan="2"><div class="title">글 쓰기</div></td>
 				</tr>
 				
 				<tr>
-					<th class="align-middle">부서 번호</th>
-					<td><input type="text" name="dept_no" value=""></td>
+					<th class="align-middle">작성자</th>
+					<td><input type="text" name="board_writer" value=""></td>
 				</tr>
 				
 				<tr>
-					<th class="align-middle">부서 이름</th>
-					<td><input type="text" name="dept_name" value=""></td>
+					<th class="align-middle">비밀번호</th>
+					<td><input type="password" name="board_pw" value=""></td>
+				</tr>
+				
+				<tr>
+					<th class="align-middle">제목</th>
+					<td><input type="text" name="board_title" value=""></td>
+				</tr>
+				
+				<tr>
+					<th class="align-middle">내용</th>
+					<td><textarea name = "board_content" rows="5" cols="43"></textarea></td>
 				</tr>
 				
 				<tr class="table-dark">
-					<th colspan="2"><button type = "submit" class="btn btn-dark buttonSize"><span class="buttonFont">추가 완료</span></button></th>
+					<th colspan="2"><button type = "submit" class="btn btn-dark buttonSize"><span class="buttonFont">작성완료</span></button></th>
 				</tr>
 				
 			</table>

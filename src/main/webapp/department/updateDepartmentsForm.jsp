@@ -84,7 +84,7 @@
 		font-weight : bolder;
 	}
 	.menuButtonSize {
-		width:120px; height:auto;
+		width:150px; height:auto;
 	}
 	.wrapper {
 	  display: grid;
