@@ -244,7 +244,7 @@
 						%>
 							<td colspan="3"></td>
 							<td colspan="1" class="center"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage+1%>"><span class="center">다음</span></a></td>
-							<td colspan="4"class="right"><a href="<%=request.getContextPath()%>//salary/salaryList.jsp?currentPage=<%=lastPage%>"><span class="center">마지막으로</span></a></td>
+							<td colspan="4"class="right"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=lastPage%>"><span class="center">마지막으로</span></a></td>
 						<%
 							
 						} else {

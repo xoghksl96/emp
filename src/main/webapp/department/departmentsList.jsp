@@ -111,7 +111,23 @@
 				<tr class="table-dark">
 					<th colspan = "4" class = "center">
 						<span class="sub">&nbsp;Departments Table&nbsp;</span>
-						<span class=""></span>
+						<span class="">
+							<form action="<%=request.getContextPath()%>/department/departmentsList.jsp" method="post">
+								<label for="word">부서 이름 검색</label>
+								<%
+								if (word == null) {
+								%>
+									<input type="text" Style = "text-align : center" name="word">
+								<%
+								} else {
+								%>
+									<input type="text" Style = "text-align : center" name="word" value="<%=word%>">
+								<%
+								}
+								%>
+								<button type="submit">검색</button>
+							</form>
+						</span>
 						
 					</th>
 				</tr>
@@ -142,13 +158,7 @@
 					<td colspan = "4" class = "center"><a type="button" class="btn btn-dark buttonSize" href = "<%=request.getContextPath()%>/department/insertDepartmentsForm.jsp"><span class="buttonFont">부서 추가</span></a></td>
 				</tr>			
 			</tbody>					
-		</table>
-		
-		<form action="<%=request.getContextPath()%>/department/departmentsList.jsp" method="post">
-			<label for="word">부서이름 검색</label>
-			<input type="text" name="word">
-			<button type="submit">검색</button>
-		</form>			
+		</table>	
 	</div>
 </body>
 </html>

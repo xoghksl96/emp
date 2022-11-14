@@ -199,7 +199,7 @@
 						<span class="sub">&nbsp;자유 게시판&nbsp;</span>
 						<span class="">
 							<form action="<%=request.getContextPath()%>/board/boardList.jsp" method="post">
-								<label for="word">부서이름 검색</label>
+								<label for="word">게시글 제목 검색</label>
 								<%
 								if (word == null) {
 								%>
