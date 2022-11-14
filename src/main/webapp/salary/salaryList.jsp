@@ -7,7 +7,7 @@
 <%@ page import = "java.sql.PreparedStatement" %>
 <%@ page import = "java.sql.ResultSet" %>
 <%
-	// 1 요청 분석
+//1 요청 분석
 
 	// 페이지 알고리즘
 	int currentPage = 1;
@@ -41,34 +41,33 @@
 	
 	// 2-1 word == null
 	if(word == null) {
-		sqlCount = "SELECT COUNT(*) FROM employees";
+		// 2-1-1 word == null 일때 행 개수 세기 및 페이징 준비
+		sqlCount = "SELECT COUNT(*) FROM salaries s INNER JOIN employees e ON s.emp_no = e.emp_no";
 		stmtCount = conn.prepareStatement(sqlCount);
 		rsCount = stmtCount.executeQuery();
 		
 		if(rsCount.next()) {
 			count = rsCount.getInt("COUNT(*)");
 		}
-		System.out.println("employees 행의 수 : " + count);
+
+		lastPage = (int)(Math.ceil((double)count / (double)ROW_PER_PAGE));
 		
-		lastPage = count / ROW_PER_PAGE;
-		if(count % ROW_PER_PAGE != 0) {	// 나누어 떨어지고 남은 값까지 출력하기 위함
-			lastPage = lastPage + 1;
-		}
 		
-		sqlSelect = "SELECT * FROM employees ORDER BY emp_no ASC LIMIT ?,?";
+		// 2-1-2 word == null 일때 출력(10개씩)
+		sqlSelect = "SELECT s.emp_no, e.first_name, e.last_name, s.salary, s.from_date, s.to_date FROM salaries s INNER JOIN employees e ON s.emp_no = e.emp_no ORDER BY s.emp_no ASC LIMIT ?,?";
 		stmtSelect = conn.prepareStatement(sqlSelect);
 		stmtSelect.setInt(1, ROW_PER_PAGE*(currentPage-1));
 		stmtSelect.setInt(2, ROW_PER_PAGE);
 		
 		rsSelect = stmtSelect.executeQuery();
 		
-		System.out.println(word+" 검색 : employees 행의 수 : " + count);
+		System.out.println("null 검색 JOIN(salaries,employees) 행의 수 : " + count);
 	}
 	
 	// 2-2 word != null
 	else {
-		// 페이징
-		sqlCount = "SELECT COUNT(*) FROM employees where first_name like ? or last_name like ?";
+		// 2-2-1 word != null 일때 행 개수 세기 및 페이징 준비
+		sqlCount = "SELECT COUNT(*) FROM salaries s INNER JOIN employees e ON s.emp_no = e.emp_no WHERE e.first_name like ? or e.last_name like ?";
 		stmtCount = conn.prepareStatement(sqlCount);
 		stmtCount.setString(1,"%"+word+"%");
 		stmtCount.setString(2,"%"+word+"%");
@@ -77,14 +76,12 @@
 		if(rsCount.next()) {
 			count = rsCount.getInt("COUNT(*)");
 		}
-		System.out.println("employees 행의 수 : " + count);
 		
-		lastPage = count / ROW_PER_PAGE;
-		if(count % ROW_PER_PAGE != 0) {	// 나누어 떨어지고 남은 값까지 출력하기 위함
-			lastPage = lastPage + 1;
-		}
+		lastPage = (int)(Math.ceil((double)count / (double)ROW_PER_PAGE));
 		
-		sqlSelect = "SELECT * FROM employees where first_name like ? or last_name like ? ORDER BY emp_no ASC LIMIT ?,?";
+		
+		// 2-2-2 word != null 일때 출력(10개씩)
+		sqlSelect = "SELECT s.emp_no, e.first_name, e.last_name, s.salary, s.from_date, s.to_date FROM salaries s INNER JOIN employees e ON s.emp_no = e.emp_no WHERE e.first_name like ? or e.last_name like ? ORDER BY s.emp_no ASC LIMIT ?,?";
 		stmtSelect = conn.prepareStatement(sqlSelect);
 		stmtSelect.setString(1,"%"+word+"%");
 		stmtSelect.setString(2,"%"+word+"%");
@@ -93,19 +90,21 @@
 		
 		rsSelect = stmtSelect.executeQuery();
 		
-		System.out.println(word+" 검색 : employees 행의 수 : " + count);
+		System.out.println(word+" 검색 JOIN(salaries,employees) 행의 수 : " + count);
 	}
 	
-	ArrayList<Employees> list = new ArrayList<Employees>();
+	ArrayList<Salary> list = new ArrayList<Salary>();
 	while(rsSelect.next()) { // ResultSet의 API를 모른다면 사용할 수 없는 반복문
-		Employees emp = new Employees();
-		emp.empNo = rsSelect.getInt("emp_no");
-		emp.birthDate = rsSelect.getString("birth_date");
-		emp.firstName = rsSelect.getString("first_name");
-		emp.lastName = rsSelect.getString("last_name");
-		emp.gender = rsSelect.getString("gender");
-		emp.hireDate = rsSelect.getString("hire_date");
-		list.add(emp);
+		Salary salary = new Salary();
+		salary.emp = new Employees();
+		
+		salary.emp.empNo = rsSelect.getInt("s.emp_no");
+		salary.emp.firstName = rsSelect.getString("e.first_name");
+		salary.emp.lastName = rsSelect.getString("e.last_name");
+		salary.salary = rsSelect.getInt("s.salary");
+		salary.fromDate = rsSelect.getString("s.from_date");
+		salary.toDate = rsSelect.getString("s.to_date");	
+		list.add(salary);
 	}
 %>
 <!DOCTYPE html>
@@ -181,9 +180,9 @@
 			<thead>					
 				<tr class="table-dark">
 					<th colspan = "8" class = "center">
-						<span class="sub">&nbsp;Employees Table&nbsp;</span>
+						<span class="sub">&nbsp;Salary Table&nbsp;</span>
 						<span class="">
-							<form action="<%=request.getContextPath()%>/emp/empList.jsp" method="post">
+							<form action="<%=request.getContextPath()%>/salary/salaryList.jsp" method="post">
 								<label for="word">사원 이름 검색</label>
 								<%
 								if (word == null) {
@@ -204,11 +203,11 @@
 										
 				<tr class="table-dark">
 					<th class = "center">사원 번호</th>
-					<th class = "center">사원 생일</th>
 					<th class = "center">First_Name</th>
 					<th class = "center">Last_Name</th>
-					<th class = "center">성별</th>
+					<th class = "center">연봉</th>
 					<th class = "center">입사일</th>
+					<th class = "center">퇴사일</th>
 					<th class = "center">수정</th>
 					<th class = "center">삭제</th>
 				</tr>
@@ -217,17 +216,17 @@
 			<tbody>
 			
 			<%
-			for(Employees emp : list) {
+			for(Salary salary : list) {
 			%>
 				<tr>
-					<td class = "center"><%=emp.empNo%></td>
-					<td class = "center"><%=emp.birthDate%></td>
-					<td class = "center"><%=emp.firstName%></td>
-					<td class = "center"><%=emp.lastName%></td>
-					<td class = "center"><%=emp.gender%></td>
-					<td class = "center"><%=emp.hireDate%></td>
-					<td class = "center"><a type="button" class="btn btn-warning subButtonSize" href = "<%=request.getContextPath()%>/emp/updateEmpForm.jsp?emp_no=<%=emp.empNo%>"><span class="subButtonFont">수정</span></a></td>
-					<td class = "center"><a type="button" class="btn btn-danger subButtonSize" href = "<%=request.getContextPath()%>/emp/deleteEmp.jsp?emp_no=<%=emp.empNo%>"><span class="subButtonFont">삭제</span></a></td>
+					<td class = "center"><%=salary.emp.empNo%></td>
+					<td class = "center"><%=salary.emp.firstName%></td>
+					<td class = "center"><%=salary.emp.lastName%></td>
+					<td class = "center"><%=salary.salary%></td>
+					<td class = "center"><%=salary.fromDate%></td>
+					<td class = "center"><%=salary.toDate%></td>
+					<td class = "center"><a type="button" class="btn btn-warning subButtonSize" href = "<%=request.getContextPath()%>/emp/updateEmpForm.jsp?emp_no=<%=salary.emp.empNo%>"><span class="subButtonFont">수정</span></a></td>
+					<td class = "center"><a type="button" class="btn btn-danger subButtonSize" href = "<%=request.getContextPath()%>/emp/deleteEmp.jsp?emp_no=<%=salary.emp.empNo%>"><span class="subButtonFont">삭제</span></a></td>
 				</tr>
 			<%
 			}
@@ -244,15 +243,15 @@
 						if(word == null) {
 						%>
 							<td colspan="3"></td>
-							<td colspan="1" class="center"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage+1%>"><span class="center">다음</span></a></td>
-							<td colspan="4"class="right"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=lastPage%>"><span class="center">마지막으로</span></a></td>
+							<td colspan="1" class="center"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage+1%>"><span class="center">다음</span></a></td>
+							<td colspan="4"class="right"><a href="<%=request.getContextPath()%>//salary/salaryList.jsp?currentPage=<%=lastPage%>"><span class="center">마지막으로</span></a></td>
 						<%
 							
 						} else {
 						%>
 							<td colspan="3"></td>
-							<td colspan="1" class="center"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage+1%>&word=<%=word%>"><span class="center">다음</span></a></td>
-							<td colspan="4"class="right"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=lastPage%>&word=<%=word%>"><span class="center">마지막으로</span></a></td>
+							<td colspan="1" class="center"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage+1%>&word=<%=word%>"><span class="center">다음</span></a></td>
+							<td colspan="4"class="right"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=lastPage%>&word=<%=word%>"><span class="center">마지막으로</span></a></td>
 						<%
 						}
 					}
@@ -260,30 +259,30 @@
 					if(currentPage > 1 && currentPage < lastPage) {
 						if(word == null) {
 						%>
-							<td class="left"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=1"><span class="center">처음으로</span></a></td>
+							<td class="left"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=1"><span class="center">처음으로</span></a></td>
 							<td colspan = "6" class="center">
 								<div class="center btn-group btn-group-lg">
-								<a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage-1%>"><span class="center">이전</span></a>
+								<a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage-1%>"><span class="center">이전</span></a>
 								&nbsp;
-								<a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage+1%>"><span class="center">다음</span></a>
+								<a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage+1%>"><span class="center">다음</span></a>
 								</div>
 							</td>
 								
-							<td class="right"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=lastPage%>"><span class="center">마지막으로</span></a></td>
+							<td class="right"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=lastPage%>"><span class="center">마지막으로</span></a></td>
 						<%
 							
 						} else {
 						%>
-							<td class="left"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=1&word=<%=word%>"><span class="center">처음으로</span></a></td>
+							<td class="left"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=1&word=<%=word%>"><span class="center">처음으로</span></a></td>
 							<td colspan = "6" class="center">
 								<div class="center btn-group btn-group-lg">
-								<a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage-1%>&word=<%=word%>"><span class="center">이전</span></a>
+								<a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage-1%>&word=<%=word%>"><span class="center">이전</span></a>
 								&nbsp;
-								<a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage+1%>&word=<%=word%>"><span class="center">다음</span></a>
+								<a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage+1%>&word=<%=word%>"><span class="center">다음</span></a>
 								</div>
 							</td>
 								
-							<td class="right"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=lastPage%>&word=<%=word%>"><span class="center">마지막으로</span></a></td>
+							<td class="right"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=lastPage%>&word=<%=word%>"><span class="center">마지막으로</span></a></td>
 						<%
 						}
 					}
@@ -291,15 +290,15 @@
 					if(currentPage == lastPage && currentPage != 1) {
 						if(word == null) {
 						%>
-							<td colspan="1" class="left"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=1"><span class="center">처음으로</span></a></td>
-							<td colspan="5" class="center"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage-1%>"><span class="center">이전</span></a></td>
+							<td colspan="1" class="left"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=1"><span class="center">처음으로</span></a></td>
+							<td colspan="5" class="center"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage-1%>"><span class="center">이전</span></a></td>
 							<td colspan="2"></td>
 						<%
 							
 						} else {
 						%>
-							<td colspan="1" class="left"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=1&word=<%=word%>"><span class="center">처음으로</span></a></td>
-							<td colspan="5" class="center"><a href="<%=request.getContextPath()%>/emp/empList.jsp?currentPage=<%=currentPage-1%>&word=<%=word%>"><span class="center">이전</span></a></td>
+							<td colspan="1" class="left"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=1&word=<%=word%>"><span class="center">처음으로</span></a></td>
+							<td colspan="5" class="center"><a href="<%=request.getContextPath()%>/salary/salaryList.jsp?currentPage=<%=currentPage-1%>&word=<%=word%>"><span class="center">이전</span></a></td>
 							<td colspan="2"></td>						
 						<%
 						}

@@ -9,7 +9,9 @@
 <%
 
 	// 1. 요청 분석 (Controller)
-	
+	request.setCharacterEncoding("utf-8");
+	String word = request.getParameter("word");
+
 	
 	// 2. 업무 처리 (Model)
 
@@ -18,7 +20,20 @@
 	Class.forName("org.mariadb.jdbc.Driver"); // 매개변수 값으로(문자열) Maria DB 사용에 필요한 Class의 풀네임이 들어가야함
 	System.out.println("departments 드라이브 로딩 성공");
 	Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/employees", "root", "java1234");	// 접속에 필요한 (주소, 계정, 비밀번호)
-	PreparedStatement stmt = conn.prepareStatement("select dept_no, dept_name from departments order by dept_no desc"); //// 접속한 DB에 쿼리를 만들 때 사용하는 메서드
+	PreparedStatement stmt = null;
+	
+	// 2-1 word == null
+	if(word == null) {
+		String sql = "select dept_no, dept_name from departments order by dept_no desc";
+		stmt = conn.prepareStatement(sql);	 // 접속한 DB에 쿼리를 만들 때 사용하는 메서드
+		
+	}
+	// 2-2 word == ''
+	else {
+		String sql = "select dept_no, dept_name from departments where dept_name like ? order by dept_no desc";
+		stmt = conn.prepareStatement(sql);	 // 접속한 DB에 쿼리를 만들 때 사용하는 메서드
+		stmt.setString(1,"%"+word+"%");
+	}
 	
 	// 쿼리를 실행하는 메서드
 	// 모델데이터로서 ResultSet은 일반적인 타입이 아니고 독립적인 타입도 아님.
@@ -94,7 +109,11 @@
 		<table class = "table table-hover" style = "background-color : rgb(255,255,255)">	
 			<thead>					
 				<tr class="table-dark">
-					<th colspan = "4" class = "center"><span class="sub">&nbsp;Departments Table&nbsp;</span></th>
+					<th colspan = "4" class = "center">
+						<span class="sub">&nbsp;Departments Table&nbsp;</span>
+						<span class=""></span>
+						
+					</th>
 				</tr>
 										
 				<tr class="table-dark">
@@ -121,10 +140,15 @@
 			%>
 				<tr>
 					<td colspan = "4" class = "center"><a type="button" class="btn btn-dark buttonSize" href = "<%=request.getContextPath()%>/department/insertDepartmentsForm.jsp"><span class="buttonFont">부서 추가</span></a></td>
-				</tr>				
-			</tbody>
-					
+				</tr>			
+			</tbody>					
 		</table>
+		
+		<form action="<%=request.getContextPath()%>/department/departmentsList.jsp" method="post">
+			<label for="word">부서이름 검색</label>
+			<input type="text" name="word">
+			<button type="submit">검색</button>
+		</form>			
 	</div>
 </body>
 </html>
