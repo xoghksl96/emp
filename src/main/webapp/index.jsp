@@ -52,10 +52,18 @@
 					&nbsp;
 					<a class="btn btn-dark button" href="<%=request.getContextPath()%>/emp/empList.jsp"><span class="buttonFont">사원 관리</span></a>
 				</div>
+				
 				<br>
+				
 				<div>
 					<a class="btn btn-dark button" href="<%=request.getContextPath()%>/salary/salaryList.jsp"><span class="buttonFont">연봉 관리</span></a>
 					&nbsp;
+					<a class="btn btn-dark button" href="<%=request.getContextPath()%>/deptEmp/deptEmpList.jsp"><span class="buttonFont">부서별 사원</span></a>
+				</div>
+				
+				<br>
+				
+				<div style="text-align : center">
 					<a class="btn btn-dark button" href="<%=request.getContextPath()%>/board/boardList.jsp"><span class="buttonFont">게시판 관리</span></a>
 				</div>
 			</td>
